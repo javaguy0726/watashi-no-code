@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}" default="" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<description>
+	   ant - sending email
+	</description>
+
+	<property name="project.name" value="Demo-7" />
+	<property file="${basedir}/build.properties" />
+	<property name="args" value="-Dhttp.proxyHost=proxy.corporate.com -Dhttp.proxyPort=3128" />
+
+	<path id="compile.classpath">
+		<fileset dir="${libs.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="test.classpath">
+		<path refid="compile.classpath">
+		</path>
+		<pathelement path="${classes.dir}" />
+	</path>
+
+	<tstamp>
+		<format property="timestamp.isoformat" pattern="yyyy-mm-dd'T'HH:mm:ss" locale="en" />
+	</tstamp>
+
+	<target name="clean" description="Delete all generated build files">
+		<delete dir="${build.dir}" includeemptydirs="true" />
+	</target>
+
+	<target name="init" depends="clean" description="create the directions">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${files.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${logs.dir}" />
+		<mkdir dir="${reports.dir}" />
+		<!--
+		<mkdir dir="${javadoc.dir}" />
+		-->
+	</target>
+
+	<target name="ant-concat" depends="init">
+		<concat destfile="${files.dir}/new.properties">
+			<path>
+				<fileset dir="${basedir}" includes="**/*.properties">
+				</fileset>
+			</path>
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</concat>
+
+		<concat>
+			<path>
+				<fileset dir="${files.dir}" includes="**/*.properties">
+				</fileset>
+			</path>
+		</concat>
+	</target>
+
+	<target name="ant-copy" depends="init">
+		<copy todir="${files.dir}">
+			<fileset dir="${basedir}" includes="**/*.java" excludes="**/*.xml, **/*.properties">
+			</fileset>
+			<mapper type="glob" from="*.java" to="*.java.bak">
+			</mapper>
+		</copy>
+	</target>
+
+	<target name="ant-move">
+		<move todir="${files.dir}" verbose="off">
+			<fileset dir="${files.dir}" includes="**/*.bak" excludes="**/*.xml, **/*.properties">
+			</fileset>
+			<mapper type="glob" from="*.java.bak" to="*.java">
+			</mapper>
+		</move>
+	</target>
+
+	<target name="compile" depends="ant-copy,ant-move" description="Compile the src files">
+		<echo>compile begin</echo>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="false" debuglevel="lines, vars,source" includeantruntime="no" failonerror="true" fork="off" encoding="UTF-8">
+			<classpath refid="compile.classpath">
+			</classpath>
+			<include name="**/*.java" />
+			<exclude name="${exclass}" />
+		</javac>
+
+		<echo>following is the doc type which are excluded automatically</echo>
+		<defaultexcludes echo="true" add="**/*.bak" />
+	</target>
+
+	<target name="ant-jar" depends="compile">
+		<manifest file="${manifest.name}">
+			<attribute name="Built-By" value="${user.name}" />
+			<attribute name="Sealed" value="true" />
+			<attribute name="Built-On" value="${timestamp.isoformat}" />
+			<attribute name="Main-Class" value="${main.class}" />
+		</manifest>
+
+		<jar destfile="${jar.name}" manifest="${manifest.name}" duplicate="preserve" compress="on" encoding="UTF-8">
+			<fileset dir="${classes.dir}" includes="**/*.class">
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="ant-unjar" depends="ant-jar">
+
+		<unjar src="${jar.name}" dest="${files.dir}/${project.name}_unjar">
+		</unjar>
+	</target>
+
+	<target name="ant-zip" depends="compile">
+		<zip destfile="${zip.name}">
+			<zipfileset dir="${src.dir}" includes="**/*.java">
+			</zipfileset>
+			<zipfileset dir="${classes.dir}" prefix="${project.name}">
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="ant-unzip" depends="ant-zip">
+		<unzip src="${zip.name}" dest="${files.dir}/${project.name}_unzip">
+		</unzip>
+	</target>
+
+	<target name="ant-java" depends="ant-jar">
+		<java classname="${main.class}">
+			<classpath path="${classes.dir}">
+			</classpath>
+		</java>
+
+		<java jar="${jar.name}" fork="true" failonerror="on">
+			<arg value="-h" />
+		</java>
+	</target>
+
+	<target name="ant-exec" depends="ant-jar">
+		<echo message="Ready to execute the jar file">
+		</echo>
+		<splash progressRegExp="Progress: (.*)%" showduration="0" displayText="Preparing..." />
+		<sleep seconds="1" />
+		<echo>Progress: 10%</echo>
+		<sleep seconds="1" />
+		<echo>Progress: 30%</echo>
+		<sleep seconds="1" />
+		<echo>Progress: 50%</echo>
+		<sleep seconds="1" />
+		<echo>Progress: 80%</echo>
+		<sleep seconds="1" />
+		<echo>Progress: 100%</echo>
+		<sleep seconds="1" />
+
+		<exec executable="${basedir}/exec.bat">
+		</exec>
+	</target>
+
+	<target name="ant-antcall" depends="compile">
+		<input message="continue compile or fail?(continue/fail)" validargs="continue,fail" addproperty="input">
+		</input>
+
+		<fail>
+			<condition>
+				<not>
+					<equals arg1="continue" arg2="${input}" />
+				</not>
+			</condition>
+		</fail>
+		<antcall target="compile">
+			<param name="exclass" value="**/*_2_Test.java" />
+		</antcall>
+	</target>
+
+	<target name="ant-test" depends="ant-zip, ant-jar">
+		<junit printsummary="on" showoutput="on" fork="on" forkmode="once" failureproperty="test.failed" errorproperty="test.failed">
+			<classpath refid="test.classpath">
+			</classpath>
+
+			<formatter type="xml" usefile="true" />
+			<batchtest todir="${logs.dir}">
+				<fileset dir="${classes.dir}">
+					<include name="${test.include.class}" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${reports.dir}">
+			<fileset dir="${logs.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports.dir}" />
+		</junitreport>
+	</target>
+
+	<target name="ant-test-sequential">
+		<junit printsummary="on" showoutput="on" fork="on" forkmode="once" failureproperty="test.failed" errorproperty="test.failed">
+			<classpath refid="test.classpath">
+			</classpath>
+
+			<formatter type="xml" usefile="true" />
+			<batchtest todir="${logs.dir}">
+				<fileset dir="${classes.dir}">
+					<include name="${include.classes}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="ant-test-parallel" depends="compile">
+		<parallel threadcount="2">
+			<sequential>
+				<antcall target="ant-test-sequential">
+					<param name="include.classes" value="**/demo1/*_Test.class" />
+				</antcall>
+
+				<antcall target="ant-test-sequential">
+					<param name="include.classes" value="**/demo2/*_Test.class" />
+				</antcall>
+
+				<antcall target="ant-test-sequential">
+					<param name="include.classes" value="**/cases/*_Test.class" />
+				</antcall>
+
+			</sequential>
+
+		</parallel>
+
+		<junitreport todir="${reports.dir}">
+			<fileset dir="${logs.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports.dir}" />
+		</junitreport>
+		<zip destfile="${report.zip.name}">
+			<zipfileset dir="${reports.dir}" includes="**/*">
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="ant-email" depends="ant-test-parallel">
+		<mail mailhost="smtp.126.com" mailport="25" subject="test reports" user="javaguy" password="jdbcxml" >
+			<from address="javaguy@126.com" />
+			<to address="skoda9ck91@hotmail.com" />
+			<message>Hi, ck. mail comes!</message>
+			<attachments>
+				<fileset dir="${dist.dir}">
+					<include name="*_report.zip" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+
+	<!-- This is used for information-->
+	<target name="ant-properties">
+		<echoproperties format="xml" destfile="${dist.dir}/ant-properties.xml">
+		</echoproperties>
+	</target>
+</project>

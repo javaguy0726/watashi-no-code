@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ant demo" default="" xmlns:ivy="antlib:org.apache.ivy.ant" >
+	<description>
+	 Test ANT functions.
+	</description>
+
+	<property name="relative.basedir" value="../." />
+	<property name="test.src.dir" location="${basedir}/src" />
+	<property name="test.libs.dir" location="${basedir}/libs" />
+
+	<property name="test.build.dir" location="${basedir}/build" />
+	<property name="test.classes.dir" location="${test.build.dir}/classes" />
+	<property name="test.reports.dir" location="${test.build.dir}/reports" />
+	<property name="test.logs.dir" location="${test.build.dir}/logs" />
+
+	<property name="test.dist.dir" location="${test.build.dir}/dist" />
+	<property name="test.javadoc.dir" location="${test.dist.dir}/api" />
+	<property name="test.project.name" value="PeopleInfo-Selenium-Test" />
+	<property name="test.src.zip" location="${test.dist.dir}/${test.project.name}-src.zip" />
+	<property name="test.target.zip" location="${test.dist.dir}/${test.project.name}-target.zip" />
+	<property name="test.target.jar" location="${test.dist.dir}/${test.project.name}-target.jar" />
+
+	<property name="test.files.tocopy" value="**/*.properties, **/*.xml" />
+
+	<property name="args" value="-Dhttp.proxyHost=proxy.corporate.com -Dhttp.proxyPort=3128" />
+
+	<property file="${basedir}/build.properties" />
+
+
+	<path id="test.compile.path">
+		<fileset dir="${test.libs.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="test.classpath">
+		<path refid="test.compile.path" />
+		<pathelement path="${test.classes.dir}" />
+	</path>
+
+	<path id="test.forking.classpath">
+		<path refid="test.classpath" />
+		<pathelement path="${java.class.path}" />
+	</path>
+
+	<fileset id="upload.files" dir="test.dist.dir">
+		<include name="**/*.zip" />
+	</fileset>
+
+	<tstamp>
+		<format property="timestamp.isoformat" pattern="yyyy-mm-dd'T'HH:mm:ss" locale="en" />
+	</tstamp>
+
+	<target name="test.clean" description="Delete all generated build files">
+		<delete dir="${test.classes.dir}" includeemptydirs="true" />
+		<delete dir="${test.build.dir}" includeemptydirs="true" />
+	</target>
+
+	<target name="test.init" depends="test.clean" description="Generate all related files">
+		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${test.build.dir}" />
+		<mkdir dir="${test.reports.dir}" />
+		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${test.logs.dir}" />
+		<mkdir dir="${test.dist.dir}" />
+		<mkdir dir="${test.javadoc.dir}" />
+	</target>
+
+	<target name="test.compile" depends="test.init" description="Compile the project files">
+		<condition property="debug.level" value="lines,source" else="lines,vars,source">
+			<isset property="release.build" />
+		</condition>
+		<echo level="verbose">debug level = ${debug.level}</echo>
+		<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="true" debuglevel="${debug.level}" includeantruntime="yes" failonerror="true">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="test.compile.path">
+			</classpath>
+		</javac>
+		<copy todir="${test.classes.dir}">
+			<fileset dir="${test.src.dir}" includes="${test.files.tocopy}">
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="test.javadoc" depends="test.compile" description="generate the api document">
+		<javadoc access="private" destdir="${test.javadoc.dir}" windowtitle="PeopleInfo Selenium Test API" failonerror="on" sourcepath="${test.src.dir}" encoding="gb2312">
+			<classpath refid="test.compile.path">
+			</classpath>
+		</javadoc>
+	</target>
+
+	<property name="main.class" value="com.selenium.test.base.SeleniumUtilAbstract">
+	</property>
+
+	<target name="test.jar" description="Create jar files" depends="test.compile">
+		<property name="manifest.mf" location="${test.build.dir}/manifest.mf">
+		</property>
+		<manifest file="${manifest.mf}">
+			<attribute name="Built-By" value="${user.name}" />
+			<attribute name="Sealed" value="true" />
+			<attribute name="Built-On" value="${timestamp.isoformat}" />
+			<attribute name="Main-Class" value="${main.class}" />
+		</manifest>
+		<jar destfile="${test.target.jar}" manifest="${manifest.mf}" duplicate="preserve" compress="on">
+			<fileset dir="${test.classes.dir}">
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="jar.security.init">
+		<property name="keystore.dir" location="${user.home}/.secret">
+		</property>
+		<mkdir dir="${keystore.dir}" />
+		<property name="keystore" location="${keystore.dir}/local.keystore">
+		</property>
+		<property file="${keystore.dir}/keystore.properties">
+		</property>
+		<property name="keystore.alias" value="code.signer">
+		</property>
+	</target>
+
+	<target name="jar.security.getpassword" depends="jar.security.init">
+		<input addproperty="keystore.password"> Password for the Signing Key:</input>
+	</target>
+
+	<target name="jar.signkey.create" depends="jar.security.getpassword">
+		<genkey alias="${keystore.alias}" keystore="${keystore}" storepass="${keystore.password}" validity="30" verbose="on">
+			<dname>
+				<param name="CN" value="Auto Signer" />
+				<param name="OU" value="Luffy D." />
+				<param name="O" value="Apache.Org" />
+				<param name="C" value="US" />
+			</dname>
+		</genkey>
+	</target>
+
+	<target name="jar.security.clean" depends="jar.security.init">
+		<delete file="${keystore}">
+		</delete>
+	</target>
+
+	<target name="jar.sign" depends="test.jar, jar.security.getpassword">
+		<fail message="No keystore file">
+			<condition>
+				<not>
+					<available file="${keystore}" />
+				</not>
+			</condition>
+		</fail>
+
+		<signjar jar="${test.target.jar}" alias="${keystore.alias}" keystore="${keystore}" storepass="${keystore.password}">
+		</signjar>
+	</target>
+
+	<target name="test.package.zip" depends="jar.sign">
+		<zip destfile="${test.target.zip}">
+			<zipfileset file="${test.target.jar}" prefix="${test.project.name}">
+			</zipfileset>
+			<zipfileset dir="." includes="src/**,build/dist/api/**,build/logs/**,build/reports/**,*.xml,*.mf" prefix="${test.project.name}">
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="test.package.unzip" depends="test.package.zip">
+		<unzip src="test.target.zip" dest="${user.home}">
+		</unzip>
+	</target>
+
+	<target name="test.zip.checksum" depends="test.init, test.package.zip">
+		<checksum file="${test.target.zip}" algorithm="sha1">
+		</checksum>
+		<checksum file="${test.target.zip}" algorithm="sha1" property="test.target.zip.sha1">
+		</checksum>
+	</target>
+
+	<target name="test.target.email" depends="test.zip.checksum">
+		<mail mailhost="smtp.126.com" mailport="25" subject="PeopleInfo testing src file" user="javaguy" password="jdbcxml" ssl="true">
+			<from name="javaguy" address="javaguy@126.com" />
+			<to name="ck" address="skoda9ck91@hotmail.com" />
+			<message>Hi CK, this is the testing src files. Please see the attached zip file for details. Thanks!</message>
+			<fileset file="${test.target.zip}">
+			</fileset>
+			<fileset file="${test.target.zip}.sha1">
+			</fileset>
+		</mail>
+	</target>
+
+	<property name="junit.fork" value="true" />
+	<property name="junit.forkmode" value="perBatch" />
+
+	<target name="single.junit.test">
+		<junit printsummary="on" showoutput="true" fork="${junit.fork}" forkmode="${junit.forkmode}" failureproperty="test.failed" errorproperty="test.failed">
+			<classpath refid="test.forking.classpath">
+			</classpath>
+			<assertions enablesystemassertions="true">
+				<enable package="com.selenium.test.cases.hygiene" />
+				<disable class="" />
+			</assertions>
+
+			<!-- the system properties  -->
+			<sysproperty key="test.browser" value="ie" />
+			<sysproperty key="test.host" value="202.110.133.146" />
+			<sysproperty key="test.userid" value="W420122025001" />
+			<sysproperty key="test.userpwd" value="87939613" />
+
+			<formatter type="xml" usefile="true" />
+			<batchtest todir="${test.logs.dir}">
+				<fileset dir="${test.classes.dir}">
+					<include name="${include.test.classes}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="parallel.junit.test" depends="test.compile">
+		<parallel threadcount="2">
+			<sequential>
+				<!--
+			<antcall target="single.junit.test">
+				<param name="include.test.classes" value="**/hygiene/birthnamecheckin/*Func.class" />
+			</antcall>
+			
+			<antcall target="single.junit.test">
+				<param name="include.test.classes" value="**/hygiene/operationcheckin/*Func.class" />
+			</antcall>
+			
+			-->
+				<antcall target="single.junit.test">
+					<param name="include.test.classes" value="**/login/*Func.class" />
+				</antcall>
+			</sequential>
+
+		</parallel>
+
+		<junitreport todir="${test.reports.dir}">
+			<fileset dir="${test.logs.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${test.reports.dir}" />
+		</junitreport>
+
+		<fail if="test.failed" message="Test failed">
+		</fail>
+	</target>
+
+
+
+	<!-- testng -->
+	<taskdef resource="testngtasks" classpath="${test.libs.dir}/testng-6.5.1.jar">
+	</taskdef>
+
+
+	<target name="run-test-testng" depends="">
+		<testng outputdir="${report.dir}" classpathref="selenium-test.classpath" haltonfailure="on">
+			<sysproperty key="test.browser.firefox" value="Firefox" />
+			<sysproperty key="test.browser.ie8" value="InternetExplorer" />
+			<sysproperty key="test.browser.chrome" value="Chrome" />
+			<sysproperty key="test.browser.safari" value="Safari" />
+
+			<xmlfileset dir="${basedir}" includes="testng-baidu.xml" />
+		</testng>
+	</target>
+
+	<!-- This is used for information-->
+	<target name="ant-properties">
+		<echoproperties format="xml" destfile="${test.dist.dir}/ant-properties.xml">
+		</echoproperties>
+	</target>
+
+	<!-- Start Selenium Server-->
+	<target name="start-server">
+		<echo message="Starting Selenium Server..." />
+		<java jar="${libs.dir}/selenium-server-standalone-2.21.0.jar" fork="on">
+			<arg line="-timeout 30" />
+			<arg line="${args}" />
+		</java>
+		<echo message=" Selenium Server is started." />
+	</target>
+
+	<!-- Stop Selenium Server-->
+	<target name="stop-server">
+		<echo message="Stoping Selenium Server..." />
+		<get taskname="selenium-shutdown" src="http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer" dest="${dest.dir}/shutdown_result.txt" ignoreerrors="true" />
+		<echo taskname="selenium-shutdown" message="Errors during shutdown are expected" />
+	</target>
+
+</project>

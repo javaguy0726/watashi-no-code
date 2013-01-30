@@ -1,0 +1,1 @@
+java -jar E:\myworkspace\AntDemo/build/dist/Demo-4.jar

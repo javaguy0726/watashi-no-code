@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="${project.name}" default="">
+	<description>
+	   ant - ant ivy
+	</description>
+
+	<property name="project.name" value="Demo-8" />
+	<property file="${basedir}/build.properties" />
+	<property name="args" value="-Dhttp.proxyHost=proxy.corporate.com -Dhttp.proxyPort=3128" />
+
+	<ivy:settings file="${ivy.settings.dir}/ivysettings.xml" />
+
+	<path id="compile.classpath">
+		<fileset dir="${libs.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="test.classpath">
+		<path refid="compile.classpath">
+		</path>
+		<pathelement path="${classes.dir}" />
+	</path>
+
+	<tstamp>
+		<format property="timestamp.isoformat" pattern="yyyy-mm-dd'T'HH:mm:ss" locale="en" />
+	</tstamp>
+
+	<target name="clean" description="Delete all generated build files">
+		<delete dir="${build.dir}" includeemptydirs="true" />
+	</target>
+
+	<target name="clean-cache" description="--> clean the ivy cache">
+		<ivy:cleancache />
+	</target>
+
+	<target name="init" depends="clean" description="create the directions">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${files.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${logs.dir}" />
+		<mkdir dir="${reports.dir}" />
+		<!--
+		<mkdir dir="${javadoc.dir}" />
+		-->
+	</target>
+
+	<target name="report" depends="resolve" description="--> generates a report of dependencies">
+		<ivy:report todir="${build.dir}" />
+	</target>
+
+	<target name="resolve" description="--> retrieve dependencies with ivy">
+		<ivy:retrieve pattern="${ivy.retrieve.pattern}" />
+	</target>
+
+	<target name="ant-concat" depends="init">
+		<concat destfile="${files.dir}/new.properties">
+			<path>
+				<fileset dir="${basedir}" includes="**/*.properties">
+				</fileset>
+			</path>
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</concat>
+
+		<concat>
+			<path>
+				<fileset dir="${files.dir}" includes="**/*.properties">
+				</fileset>
+			</path>
+		</concat>
+	</target>
+
+	<target name="ant-copy" depends="init">
+		<copy todir="${files.dir}">
+			<fileset dir="${basedir}" includes="**/*.java" excludes="**/*.xml, **/*.properties">
+			</fileset>
+			<mapper type="glob" from="*.java" to="*.java.bak">
+			</mapper>
+		</copy>
+	</target>
+
+	<target name="ant-move">
+		<move todir="${files.dir}" verbose="off">
+			<fileset dir="${files.dir}" includes="**/*.bak" excludes="**/*.xml, **/*.properties">
+			</fileset>
+			<mapper type="glob" from="*.java.bak" to="*.java">
+			</mapper>
+		</move>
+	</target>
+
+	<target name="compile" depends="ant-copy,ant-move,resolve" description="Compile the src files">
+		<echo>compile begin</echo>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="false" debuglevel="lines, vars,source" includeantruntime="no" failonerror="true" fork="off" encoding="UTF-8">
+			<classpath refid="compile.classpath">
+			</classpath>
+			<include name="**/*.java" />
+			<exclude name="${exclass}" />
+		</javac>
+
+	</target>
+
+	<target name="ant-java" depends="">
+		<java classname="${main.class}">
+			<classpath path="${classes.dir}">
+			</classpath>
+		</java>
+
+		<java jar="${jar.name}" fork="true" failonerror="on">
+			<arg value="-h" />
+		</java>
+	</target>
+
+	<target name="ant-antcall" depends="compile">
+		<input message="continue compile or fail?(continue/fail)" validargs="continue,fail" addproperty="input">
+		</input>
+
+		<fail>
+			<condition>
+				<not>
+					<equals arg1="continue" arg2="${input}" />
+				</not>
+			</condition>
+		</fail>
+		<antcall target="compile">
+			<param name="exclass" value="**/*_2_Test.java" />
+		</antcall>
+	</target>
+
+	<target name="ant-test" depends="">
+		<junit printsummary="on" showoutput="on" fork="on" forkmode="once" failureproperty="test.failed" errorproperty="test.failed">
+			<classpath refid="test.classpath">
+			</classpath>
+
+			<formatter type="xml" usefile="true" />
+			<batchtest todir="${logs.dir}">
+				<fileset dir="${classes.dir}">
+					<include name="${test.include.class}" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${reports.dir}">
+			<fileset dir="${logs.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports.dir}" />
+		</junitreport>
+	</target>
+
+	<target name="ant-test-sequential">
+		<junit printsummary="on" showoutput="on" fork="on" forkmode="once" failureproperty="test.failed" errorproperty="test.failed">
+			<classpath refid="test.classpath">
+			</classpath>
+
+			<formatter type="xml" usefile="true" />
+			<batchtest todir="${logs.dir}">
+				<fileset dir="${classes.dir}">
+					<include name="${include.classes}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="ant-test-parallel" depends="compile">
+		<parallel threadcount="2">
+			<sequential>
+				<antcall target="ant-test-sequential">
+					<param name="include.classes" value="**/demo1/*_Test.class" />
+				</antcall>
+
+				<antcall target="ant-test-sequential">
+					<param name="include.classes" value="**/demo2/*_Test.class" />
+				</antcall>
+
+				<antcall target="ant-test-sequential">
+					<param name="include.classes" value="**/cases/*_Test.class" />
+				</antcall>
+
+			</sequential>
+
+		</parallel>
+
+		<junitreport todir="${reports.dir}">
+			<fileset dir="${logs.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${reports.dir}" />
+		</junitreport>
+		<zip destfile="${report.zip.name}">
+			<zipfileset dir="${reports.dir}" includes="**/*">
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="ant-email" depends="ant-test-parallel">
+		<mail mailhost="smtp.126.com" mailport="25" subject="test reports" user="javaguy" password="jdbcxml">
+			<from address="javaguy@126.com" />
+			<to address="skoda9ck91@hotmail.com" />
+			<message>Hi, ck. mail comes!</message>
+			<attachments>
+				<fileset dir="${dist.dir}">
+					<include name="*_report.zip" />
+				</fileset>
+			</attachments>
+		</mail>
+	</target>
+
+	<!-- This is used for information-->
+	<target name="ant-properties">
+		<echoproperties format="xml" destfile="${dist.dir}/ant-properties.xml">
+		</echoproperties>
+	</target>
+</project>

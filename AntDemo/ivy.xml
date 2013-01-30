@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ivy-module version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="org.apache.ivy" module="ivy" revision="2.3.0-rc1" status="milestone" publication="20120416000235">
+		<description homepage="http://ant.apache.org/ivy/">
+			this is ivy.xml
+		</description>
+	</info>
+	<configurations>
+    </configurations>
+	<publications>
+	</publications>
+
+	<dependencies>
+		<dependency org="junit" name="junit" rev="4.10"/>
+
+	</dependencies>
+</ivy-module>

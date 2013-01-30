@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}" default="" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<description>
+	   ant - compile 
+	</description>
+
+	<property name="project.name" value="Demo-1" />
+	<property file="${basedir}/build.properties" />
+	<property name="args" value="-Dhttp.proxyHost=proxy.corporate.com -Dhttp.proxyPort=3128" />
+
+	<path id="compile.classpath">
+		<fileset dir="${libs.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean" description="Delete all generated build files">
+		<delete dir="${build.dir}" includeemptydirs="true" />
+	</target>
+
+	<target name="init" depends="clean" description="create the directions">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+
+	</target>
+
+	<target name="compile" depends="init" description="Compile the src files">
+		<echo>compile begin</echo>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="false" debuglevel="lines, vars,source" includeantruntime="no" failonerror="true" fork="off">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="compile.classpath">
+			</classpath>
+			<include name="**/*.java" />
+			<exclude name="" />
+		</javac>
+
+	</target>
+
+
+</project>

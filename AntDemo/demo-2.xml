@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}" default="" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<description>
+	   ant - files operation
+	</description>
+
+	<property name="project.name" value="Demo-2" />
+	<property file="${basedir}/build.properties" />
+	<property name="args" value="-Dhttp.proxyHost=proxy.corporate.com -Dhttp.proxyPort=3128" />
+
+	<path id="compile.classpath" >
+		<fileset dir="${libs.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean" description="Delete all generated build files">
+		<delete dir="${build.dir}" includeemptydirs="true" />
+	</target>
+
+	<target name="init" depends="clean" description="create the directions">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${files.dir}" />
+		<!--
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${reports.dir}" />
+		<mkdir dir="${logs.dir}" />
+		<mkdir dir="${javadoc.dir}" />
+		-->
+	</target>
+
+	<target name="ant-concat" depends="init">
+		<concat destfile="${files.dir}/new.properties">
+			<path>
+				<fileset dir="${basedir}" includes="**/*.properties">
+				</fileset>
+			</path>
+			<filterchain>
+				<expandproperties />
+			</filterchain>
+		</concat>
+	</target>
+
+	<target name="ant-copy" depends="init">
+		<copy todir="${files.dir}">
+			<fileset dir="${basedir}" includes="**/*.java" excludes="**/*.xml, **/*.properties">
+			</fileset>
+			<mapper type="glob" from="*.java" to="*.java.bak">
+			</mapper>
+		</copy>
+	</target>
+	
+	<target name="ant-move" >
+		<move todir="${files.dir}" verbose="off">
+			<fileset dir="${files.dir}" includes="**/*.bak" excludes="**/*.xml, **/*.properties">
+			</fileset>
+			<mapper type="glob" from="*.java.bak" to="*.java">
+			</mapper>
+		</move>
+	</target>
+
+	<target name="compile" depends="ant-copy, ant-move" description="Compile the src files">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="false" debuglevel="lines, vars,source" includeantruntime="no" failonerror="true" fork="off">
+			<compilerarg line="-encoding UTF-8" />
+			<classpath refid="compile.classpath">
+			</classpath>
+			<include name="**/*1_*.java"/>
+			<exclude name=""/>
+		</javac>
+	</target>
+
+
+</project>
