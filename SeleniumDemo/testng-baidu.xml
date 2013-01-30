@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="baidu-suite" >
+	<parameter name="searchterm1" value="Gundam OO"></parameter>
+	<parameter name="searchterm2" value="Gundam SEED"></parameter>
+	
+	<test name="baidu-lf-test" preserve-order="true" >
+		<classes>
+			<class name="com.selenium.test.cases.baidu.BaiduHomePageLFTest" ></class>
+		</classes>
+	</test>
+
+</suite> 
