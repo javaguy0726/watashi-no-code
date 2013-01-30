@@ -1,0 +1,94 @@
+[0.001][INFO]:      ChromeDriver 23.0.1240.0 C:\Python27\chromedriver.exe
+[0.506][FINE]:      Initializing session with capabilities {
+   "browserName": "chrome",
+   "chromeOptions": {
+      "args": [  ],
+      "binary": "",
+      "extensions": [  ]
+   },
+   "javascriptEnabled": true,
+   "platform": "ANY",
+   "version": ""
+}
+
+[0.507][INFO]:      Launching chrome: "C:\Users\Administrator\AppData\Local\Google\Chrome\Application\chrome.exe" --enable-logging --log-level=1 --disable-hang-monitor --disable-prompt-on-repost --dom-automation --full-memory-crash-report --no-default-browser-check --no-first-run --disable-background-networking --disable-sync --disable-translate --disable-web-resources --safebrowsing-disable-auto-update --safebrowsing-disable-download-protection --disable-client-side-phishing-detection --disable-component-update --disable-default-apps --ignore-certificate-errors about:blank
+[0.967][INFO]:      Connected to Chrome successfully. Version: 25.0.1359.3
+[0.977][FINE]:      Command received (/session/a1189873c696e4ece00dde98bcb8e7c7)
+[0.977][FINE]:      Command finished (/session/a1189873c696e4ece00dde98bcb8e7c7) with response {
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7",
+   "status": 0,
+   "value": {
+      "acceptSslCerts": false,
+      "applicationCacheEnabled": false,
+      "browserConnectionEnabled": false,
+      "browserName": "chrome",
+      "chrome.chromedriverVersion": "23.0.1240.0",
+      "chrome.nativeEvents": false,
+      "cssSelectorsEnabled": true,
+      "databaseEnabled": false,
+      "handlesAlerts": true,
+      "javascriptEnabled": true,
+      "locationContextEnabled": false,
+      "nativeEvents": true,
+      "platform": "windows",
+      "rotatable": false,
+      "takesScreenshot": true,
+      "version": "25.0.1359.3",
+      "webStorageEnabled": true
+   }
+}
+
+[0.991][FINE]:      Command received (/session/a1189873c696e4ece00dde98bcb8e7c7/timeouts/implicit_wait) with params {
+   "ms": 30000.0,
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7"
+}
+
+[0.991][FINER]:     Waiting for all views to stop loading...
+[0.992][FINER]:     Done waiting for all views to stop loading
+[0.992][FINER]:     Waiting for all views to stop loading...
+[0.992][FINER]:     Done waiting for all views to stop loading
+[0.992][FINE]:      Command finished (/session/a1189873c696e4ece00dde98bcb8e7c7/timeouts/implicit_wait) with response {
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[0.996][FINE]:      Command received (/session/a1189873c696e4ece00dde98bcb8e7c7/url) with params {
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7",
+   "url": "http://www.360buy.com/"
+}
+
+[0.996][FINER]:     Waiting for all views to stop loading...
+[0.996][FINER]:     Done waiting for all views to stop loading
+[4.860][FINER]:     Waiting for all views to stop loading...
+[4.865][FINER]:     Done waiting for all views to stop loading
+[4.865][FINE]:      Command finished (/session/a1189873c696e4ece00dde98bcb8e7c7/url) with response {
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7",
+   "status": 0,
+   "value": {
+
+   }
+}
+
+[4.868][FINE]:      Command received (/session/a1189873c696e4ece00dde98bcb8e7c7/element) with params {
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7",
+   "using": "xpath",
+   "value": "//*[@id='search']//input[@type='button']"
+}
+
+[4.868][FINER]:     Waiting for all views to stop loading...
+[4.868][FINER]:     Done waiting for all views to stop loading
+[4.885][FINER]:     Waiting for all views to stop loading...
+[4.885][FINER]:     Done waiting for all views to stop loading
+[4.885][FINE]:      Command finished (/session/a1189873c696e4ece00dde98bcb8e7c7/element) with response {
+   "sessionId": "a1189873c696e4ece00dde98bcb8e7c7",
+   "status": 0,
+   "value": {
+      "ELEMENT": ":wdc:1356447258956"
+   }
+}
+
+[34.896][FINE]:     Command received (/session/a1189873c696e4ece00dde98bcb8e7c7)
+[35.100][INFO]:     Chrome shutdown
