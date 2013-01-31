@@ -41,7 +41,7 @@ function Button(elementName, options) {
     		this.button.options.onClick.call(this.button);
     	}
     }*/
-    
+        
     this.element.onmouseover = this.onArm;
     this.element.onmouseout = this.onDisarm;
     this.element.onmousedown = this.onPress;
