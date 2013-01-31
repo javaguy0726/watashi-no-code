@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript">
+	function ls_1() {
+		localStorage.lastname = "Smith";
+		document.write(localStorage.lastname);
+	}
+
+	function ls_2() {
+		if (localStorage.pagecount) {
+			localStorage.pagecount = Number(localStorage.pagecount) + 1;
+		} else {
+			localStorage.pagecount = 1;
+		}
+		document.write("Visits " + localStorage.pagecount + " time(s).");
+	}
+
+	function ss_1() {
+		if (sessionStorage.pagecount) {
+			sessionStorage.pagecount = Number(sessionStorage.pagecount) + 1;
+		} else {
+			sessionStorage.pagecount = 1;
+		}
+		document.write("Visits " + sessionStorage.pagecount
+				+ " time(s) this session.");
+	}
+</script>
+
+
+</head>
+<body>
+
+	<div id="webstorage">
+		<button id="button1" onclick="ss_1();"
+			style="width: 50px; height: 30px;">OK</button>
+
+	</div>
+	<script type="text/javascript">
+		if (window.addEventListener) {
+			window.addEventListener("storage", handle_storage, false);
+		} else if (window.attachEvent) {
+			window.attachEvent("onstorage", handle_storage);
+		}
+		function handle_storage(e) {
+			if (!e) {
+				e = window.event;
+			}
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<input type="button" id="aButton" value="demo" />
+	<script type="text/javascript">
+		var button = document.getElementById("aButton");//statements 1
+		function demo() {
+			this.value = "test";//statements 2
+			alert(button.value);//statements 3
+		}
+		button.onclick = demo;//statements 4
+		alert(button.onclick);//statements 5
+	</script>
+
+
+</body>
+</html>

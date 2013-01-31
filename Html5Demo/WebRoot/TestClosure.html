@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script type="text/javascript">
+	      var name = "1";
+	　　
+	      var object=new Object();
+	       object.name="2";
+	       object.getNameFunc = function(){
+	　　　　　　return function(){
+		                    alert("_____"+ this.name);
+	　　　　　　　　return this.name;
+	　　　　　　}; 
+	       };
+
+	　　alert(object.getNameFunc()());
+// result(); 
+
+</script>
+</body>
+</html>
