@@ -24,8 +24,8 @@ new DVD9('Chicken Run','Nick Park',213,'cccccc')
     <body>
 
         <script>
-            myCollection.each(function(disc) {
-                document.write('<p>' + disc.title + ':' + disc.whereIsIt() +'</p>');
+            myCollection.each(function(disc,index) {
+                document.write('<p>' + index + ':' +disc.title + ':' + disc.whereIsIt() +'</p>');
             });
         </script>
 
