@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript" charset="utf-8">
-	var elem = document.forms.shipping.ck;
-	document.write("---"+elem);
-</script>
+
 </head>
 <body>
-<form name="shipping" action="#">
+<form id="ship" name="shipping" action="#">
     <fieldset>
       <legend>shipping method</legend>
-      <label><input type="radio" name="ck"  value="1st"/>1</label>
-      <label><input type="radio" name="ck"  value="2nd"/>2</label>
-      <label><input type="radio" name="ck"  value="3rd"/>3</label>
+      <label><input id="s1" type="radio" name="ck"  value="1st"/>1</label>
+      <label><input id="s1" type="radio" name="ck"  value="2nd"/>2</label>
+      <label><input id="s1" type="radio" name="ck"  value="3rd"/>3</label>
     </fieldset>
-    <input type="submit" value="OK"></input>
+    <input type="submit" name="ok" value="OK"></input>
 </form>
+<script type="text/javascript" charset="utf-8">
+	var elem = document.forms.shipping.ck;
+	document.write("---"+elem[0].form.ok.name);
+</script>
 </body>
 </html>
