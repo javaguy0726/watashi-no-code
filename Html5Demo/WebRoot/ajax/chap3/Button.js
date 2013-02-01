@@ -24,15 +24,18 @@ function Button(elementName, options) {
     Button.prototype.CLASS_DEFAULT_CLASS_PRESSED = 'buttonPressed';
 
     //将Button实例存到变量中，因爲閉包創建時不包含函數的上下文 即this
-    //加入使用的不是instance而是this,那麼結果會等同於調用element.options.xx, 這顯然不對
+    //假如使用的不是instance而是this,那麼結果會等同於調用element.options.xx, 這显然不對
     var instance = this;
-    this.element.onclick = function() {//  - 4
-        if (instance.options.enabled) {
+    this.element.onclick = (function() {//  - 4
+//        if (instance.options.enabled) {
 //            instance.options.onClick.call(instance);
-        	  instance.options.onClick(); //如果改成這種形式，那麼this.element.id就不能被識別， 因爲此時的onclick等於是options的一個方法，this指向的是options
-        }
+//        	  instance.options.onClick(); //如果改成這種形式，那麼this.element.id就不能被識別， 因爲此時的onclick等於是options的一個方法，this指向的是options
+//        }
+        if (this.options.enabled) {
+            this.options.onClick.call(this);
+          }
         
-    };
+    }).call(this);
     
     //改造成自引用的方式
    /* this.element.onclick = function(){

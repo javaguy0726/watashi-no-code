@@ -21,6 +21,7 @@ Button.prototype = {
     this.element.onmouseout = this.onDisarm.bind(this);
     this.element.onmousedown = this.onPress.bind(this);
     this.element.onmouseup = this.onRelease.bind(this);
+    
     if (this.options.enabled) {
       this.enable();
     }

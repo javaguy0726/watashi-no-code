@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Button Test</title>
-    <script type="text/javascript" src="scripts/prototype.js"></script>
+    <script type="text/javascript" src="../../js/prototype/prototype.js"></script>
     <script type="text/javascript" src="Button.js"></script>
     <script type="text/javascript">
       window.onload = function() {
@@ -13,8 +13,8 @@
       }
  
       function onClicked() {
-       // alert('Button ' + this.element.id + ' has been clicked');
-        alert('Button ' + this.enabled + ' has been clicked');
+       alert('Button ' + this.element.id + ' has been clicked');
+        // alert('Button ' + this.enabled + ' has been clicked');
       }
 
       function toggleButtonState() {
