@@ -10,9 +10,7 @@ function Button(elementName, options) {
 
     if (options) {
         this.options.enabled = options.enabled || true;
-        this.options.onClick = options.onClick ||
-        function() {
-        };
+        this.options.onClick = options.onClick ||function() {};
         this.options.enabledClassName = options.enabledClassName || this.CLASS_DEFAULT_CLASS_ENABLED;
         this.options.disabledClassName = options.disabledClassName || this.CLASS_DEFAULT_CLASS_DISABLED;
         this.options.armedClassName = options.armedClassName || this.CLASS_DEFAULT_CLASS_ARMED;
@@ -30,7 +28,8 @@ function Button(elementName, options) {
     var instance = this;
     this.element.onclick = function() {//  - 4
         if (instance.options.enabled) {
-            instance.options.onClick.call(instance);
+//            instance.options.onClick.call(instance);
+        	  instance.options.onClick(); //如果改成這種形式，那麼this.element.id就不能被識別， 因爲此時的onclick等於是options的一個方法，this指向的是options
         }
         
     };
