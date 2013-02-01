@@ -6,6 +6,7 @@ CD.prototype = Object.extend(
 
     initialize: function(title,artist,location) {
       this._initializeDisc(title,location,'CD');
+      this._mymethod1();
       this.artist = artist;
     }
 
