@@ -1,21 +1,25 @@
 <html>
-  <head>
-    <title>Now!</title>
-    <script type="text/javascript" src="prototype.js"></script>
-    <script>
-      function update() {
-        new Ajax.Updater( 'timeDisplay', 'date.jsp',
-          {
-            method: 'get'
-          }
-        );
-      }
-    </script>
-  </head>
-
-  <body>
-    <button type="button" onclick="update()">Click me!</button>
-    <span id="timeDisplay"/>
-  </body>
-
+    <head>
+        <title>Now!</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="text/javascript" src="../../../js/prototype/prototype.js">
+        </script>
+        <script>
+            function update(){
+                new Ajax.Updater('timeDisplay', 'date.jsp', 
+				{
+                    method: 'get'
+					
+                }
+				
+				);
+            }
+        </script>
+    </head>
+    <body>
+        <button type="button" onclick="update();">
+            Click me!
+        </button>
+        <span id="timeDisplay"/>
+    </body>
 </html>

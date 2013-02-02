@@ -1,13 +1,15 @@
 <html>
   <head>
     <title>Right now!</title>
-    <script type="text/javascript" src="prototype.js"></script>
+        <script type="text/javascript" src="../../../js/prototype/prototype.js">
+        	
+        </script>
     <script>
       function update() {
         new Ajax.PeriodicalUpdater( 'timeDisplay', 'date2.jsp',
           {
             method: 'get',
-            frequency: 5
+            frequency: 1
           }
         );
       }
