@@ -6,8 +6,8 @@
       function lookup() {
         dojo.io.bind(
           {
-            url: 'phone.jsp?who='+document.froms.lookupForm.who.value,
-            load: function(type, data, req) { document.getElementById('displayArea').innerHTML = data; },
+            url: 'phone.jsp?who=' + document.forms.lookupForm.who.options[1].selected,
+            load: function(type, data, req) { document.getElementById('displayArea').innerHTML = data; },  //req.responsText = data
             mimetype: "text/plain"
           }
         );
@@ -17,15 +17,28 @@
 
   <body>
     <form name="lookupForm" onsubmit="return false;">
-      <select name="who" onchange="lookup()">
+      <select name="who" onchange="move();"  >
         <option value="JOHN">John</option>
-        <option value="MARY">Mary</option>
-        <option value="BILL">Bill</option>
+        <option value="">Mary</option>
+        <option >Bill</option>
+      </select>
+	  <select name="whos" onchange="lookup();"  >
+        <option value="JOHN2">John2</option>
+        <option value="">Mary2</option>
+        <option >Bill2</option>
       </select>
     </form>
     <div>
-      Phone # is: <span id="displayArea"/>
+      Phone # is: <span id="displayArea"></span>
     </div>
+	<script>
+		function move(){
+			var select1 = document.getElementsByName("who")[0];
+			var select2 = document.getElementsByName("whos")[0];
+			option1 = select1.options[2];
+			select1.insertBefore(option1, select1.options[select1.selectedIndex]);
+		}
+	</script>
   </body>
 
 </html>

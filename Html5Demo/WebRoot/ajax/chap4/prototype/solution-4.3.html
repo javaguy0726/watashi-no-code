@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>T-shirts!</title>
-    <script type="text/javascript" src="prototype.js"></script>
+    <script type="text/javascript" src="../../../js/prototype/prototype.js"></script>
     <script>
       function updateSizes() {
         if ($F('color')=='') return;
@@ -17,11 +17,12 @@
       }
 
       function populateSizes(r) {
-        eval('var sizes=' + r.responseText);
+//        eval('var sizes=' + r.responseText);
+        var sizes = eval('('+r.responseText+')');
         var sizeElement = $('size');
-        while (sizeElement.options.length > 1) sizeElement.remove(1);
+        while (sizeElement.options.length > 1) sizeElement.remove(1);//clean the size dropdown first
         for (var n = 0; n < sizes.length; n++) {
-          sizeElement.add(new Option( sizes[n],sizes[n]), document.all ? 0 : null );
+          sizeElement.add(new Option( sizes[n],sizes[n]), document.all ? 0 : null ); //document.all用于检测浏览器，为IE的时候需要设置为0
         }
         sizeElement.disabled = false;
       }
