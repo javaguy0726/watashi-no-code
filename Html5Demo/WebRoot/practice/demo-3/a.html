@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-
-</head>
-<body>
-<form id="ship" name="shipping" action="#">
-    <fieldset>
-      <legend>shipping method</legend>
-      <label><input id="s1" type="radio" name="ck"  value="1st"/>1</label>
-      <label><input id="s1" type="radio" name="ck"  value="2nd"/>2</label>
-      <label><input id="s1" type="radio" name="ck"  value="3rd"/>3</label>
-    </fieldset>
-    <input type="submit" name="ok" value="OK"></input>
-</form>
-<script type="text/javascript" charset="utf-8">
-	var elem = document.forms.shipping.ck;
-	document.write("---"+elem[0].form.ok.name);
-</script>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Insert title here</title>
+    </head>
+    <body>
+        <form id="ship" action="#">
+            <fieldset>
+                <legend>
+                    shipping method
+                </legend>
+                <label>
+                    <input id="s1" type="radio" name="ck" value="1st"/>1
+                </label>
+                <label>
+                    <input id="s1" type="radio" name="ck" value="2nd"/>2
+                </label>
+                <label>
+                    <input id="s1" type="radio" name="ck" value="3rd"/>3
+                </label>
+            </fieldset><input type="submit" name="ok" value="OK">
+            </input>
+        </form>
+		
+		<input type="radio" name="r" id="r1" value="1">1
+        </input><input type="radio" name="r" id="r2" value="2">2
+        </input><input type="radio" name="r" id="r3" value="3">3
+        </input>
+        <script type="text/javascript" charset="utf-8">
+            document.write("---" + r1.checked);
+        </script>
+    </body>
 </html>
