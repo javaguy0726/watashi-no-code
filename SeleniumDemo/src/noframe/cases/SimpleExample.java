@@ -15,7 +15,7 @@ import com.thoughtworks.selenium.SeleneseTestBase;
 public class SimpleExample {
 	public static void main(String[] args) {
 		System.setProperty("webdriver.chrome.driver",
-				"/home/renta/Tools/resouces/chromedriver");
+				"/home/renta/Tools/resouces/chromedriver_linux32");
 		WebDriver driver = null;
 		try {
 
