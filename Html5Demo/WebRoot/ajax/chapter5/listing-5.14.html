@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Submit!</title>
-    <script type="text/javascript" src="prototype-1.5.1.js">
+    <script type="text/javascript" src="../../js/prototype/prototype.js">
     </script>
     <script type="text/javascript">
       window.onload = function() {
@@ -11,7 +11,7 @@
 
       function submitMe(event) {
         new Ajax.Request(
-          '/aip.chap5/handleSubmission',
+          '/Html5Demo/handleSubmission',
           {
             method: 'post',
             parameters: $('infoForm').serialize(true),
@@ -26,14 +26,16 @@
   </head>
 
   <body>
-    <form id="infoForm" action="/aip.chap5/shouldNotActivate">
+    <form id="infoForm" action="/shouldNotActivate">
       <div>
         <label>Address:</label>
         <input type="text" id="addressField" name="address"/>
       </div>
       <div>
-        <label>City:</label>
-        <input type="text" id="cityField" name="city"/>
+        <label>City1:</label>
+        <input type="text" id="cityField1" name="city"/>
+        <label>City2:</label>
+        <input type="text" id="cityField2" name="city"/>
         <label>State:</label>
         <input type="text" id="stateField" name="state"/>
         <label>Zip Code:</label>

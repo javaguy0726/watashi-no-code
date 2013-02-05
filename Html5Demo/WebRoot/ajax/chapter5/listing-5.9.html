@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Blur and Focus</title>
-    <script type="text/javascript" src="prototype-1.5.1.js">
+     <script type="text/javascript" src="../../js/prototype/prototype.js">
     </script>
     <script type="text/javascript">
       window.onload = function() {
@@ -11,7 +11,7 @@
         Event.observe('breedField', 'focus', react);
         Event.observe('dobField', 'blur', react);
         Event.observe('dobField', 'focus', react);
-        $('nameField').focus();
+        $('dobField').focus();
       }
 
       function react(event) {

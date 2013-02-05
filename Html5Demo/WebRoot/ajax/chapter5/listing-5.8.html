@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Mouse events!</title>
-    <script type="text/javascript" src="prototype-1.5.1.js">
+    <script type="text/javascript" src="../../js/prototype/prototype.js">
     </script>
     <script type="text/javascript">
       window.onload = function() {
@@ -12,15 +12,14 @@
 
       function react(event) {
         $('info').innerHTML +=
-          'I bark for ' + event.type +
-          ' at (' + Event.pointerX(event) + ','+
-          Event.pointerY(event) + ')!<br/>';
+          'I bark for ' + event.type +' '+event.clientX+' '+
++event.clientY +' '+event.button+' at (' + Event.pointerX(ev6
       }
     </script>
   </head>
 
   <body>
-    <img src="image.jpg" id="anImage"/>
+     <img src="../../img/oono.jpg" id="anImage"/>
     <div id="info"></div>
   </body>
 </html>

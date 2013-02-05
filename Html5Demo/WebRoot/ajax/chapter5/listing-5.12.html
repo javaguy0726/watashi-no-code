@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>I Need Validation</title>
-    <script type="text/javascript" src="prototype-1.5.1.js">
+    <script type="text/javascript" src="../../js/prototype/prototype.js">
     </script>
     <script type="text/javascript">
       window.onload = function() {
@@ -11,7 +11,7 @@
 
       function validateZipCode(event) {
         new Ajax.Request(
-          '/aip.chap5/validateZipCode',
+          '/Html5Demo/validateZipCode',
           {
             method: 'get',
             parameters: $('infoForm').serialize(true),

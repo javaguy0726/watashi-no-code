@@ -1,13 +1,13 @@
 <html>
   <head>
     <title>Page Events</title>
-    <script type="text/javascript" src="prototype-1.5.1.js">
+   <script type="text/javascript" src="../../js/prototype/prototype.js">
     </script>
     <script type="text/javascript">
       window.onload = function() {
         alert('Loaded!');
         window.onunload = function() {
-          alert('Unloaded!');
+          alert('Unloaded!-------------------------------------------');
         }
         window.onbeforeunload = function() {
           return 'Leaving so soon?';
