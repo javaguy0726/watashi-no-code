@@ -7,7 +7,7 @@
             var framework = new ValidatorFramework();
             window.onload = function() {
                 Event.observe('testForm', 'submit', function(event) {  
-                    if (!framework.validateForm(event.target))   //传入的event.target实际上是数组，由input1 input2 和 submit组成
+                    if (!framework.validateForm(event.target))   //传入的event.target实际上是数组，包含了这个表单中的所有控件，如input ， submit
                         Event.stop(event);
                 });
             }
