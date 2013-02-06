@@ -1,9 +1,9 @@
 <html>
   <head>
     <title>Listing 6.10</title>
-    <script type="text/javascript"
-            src="jquery.js"></script>
-    <script type="text/javascript">
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="../../js/jquery/jquery.form.js"></script>
+<script type="text/javascript">
       $(document).ready(function() {
         $('form').bind("change",
           function(event) {
@@ -14,6 +14,7 @@
           submitForm();
           return false;
         })
+        
         trackCheckboxes();
       });
 
@@ -37,20 +38,18 @@
       function submitForm() {
         var params = {};
         $('#testForm .fieldChanged').each(function() {
-          if (this.disabled) return;
+          if (this.disabled) return;    				//return = return true =continue ; return false = break
           if (this.name.length==0) return;
-          if ((this.type=='radio' || this.type=='checkbox') &&
-              !this.checked) return;
+          if ((this.type=='radio' || this.type=='checkbox') && !this.checked) return;
           if (this.type=='reset') return;
-          if (this.type=='multiple' ||
-              this.type=='select-multiple') {
-            for(n = 0; n < this.length; n++) {
-               if (this[n].selected)
-                 addParam(params,this.name,this[n].value);
+          if (this.type=='multiple' ||this.type=='select-multiple') {
+            for(var n = 0; n < this.length; n++) {
+               if (this.options[n].selected)
+                 addParam(params,this.name,this[n].value);  //name为下拉的名字，value为各选项的value  存入params对象
             }
           }
           else {
-            addParam(params,this.name,this.value);
+            addParam(params,this.name,this.value); //修改的数据相继存入params中
           }
         });
         $.post($('#testForm').get(0).action,
@@ -77,7 +76,7 @@
 
   <body>
     <form id="testForm"
-          action="/aip.chap6/requestInspector">
+          action="/Html5Demo/requestInspector">
       <div>
         Text:
         <input type="text" id="aTextField" name="aTextField"/>
@@ -98,7 +97,7 @@
       <div>
         Select:
         <select name="aSelect" id="aSelect">
-          <option value="1">One</option>
+          <option value="1" >One</option>
           <option value="2">Two</option>
           <option value="3">Three</option>
         </select>
@@ -107,7 +106,7 @@
         Multi-select:
         <select name="aMultiSelect" id="aMultiSelect"
                 multiple="multiple" rows="3">
-          <option value="1">One</option>
+          <option value="1" >One</option>
           <option value="2">Two</option>
           <option value="3">Three</option>
         </select>
