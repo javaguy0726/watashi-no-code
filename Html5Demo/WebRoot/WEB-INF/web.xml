@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<display-name>Ajax In Practice</display-name>
+	<servlet>
+		<servlet-name>ZipCodeValidator</servlet-name>
+		<servlet-class>org.aip.chap5.ZipCodeValidatorServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ZipCodeValidator</servlet-name>
+		<url-pattern>/validateZipCode</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ParameterInspector</servlet-name>
+		<servlet-class>org.aip.chap5.ParameterInspectorServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ParameterInspector</servlet-name>
+		<url-pattern>/handleSubmission</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>PostServlet</servlet-name>
+		<servlet-class>org.aip.chap6.PostServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PostServlet</servlet-name>
+		<url-pattern>/postServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ParameterInspector2</servlet-name>
+		<servlet-class>org.aip.chap6.ParameterInspectorServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ParameterInspector2</servlet-name>
+		<url-pattern>/requestInspector</url-pattern>
+	</servlet-mapping>
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<include-prelude>/prelude.jspf</include-prelude>
+		</jsp-property-group>
+	</jsp-config>
+
+</web-app>
