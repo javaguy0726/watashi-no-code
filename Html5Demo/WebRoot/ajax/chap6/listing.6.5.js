@@ -1,153 +1,150 @@
 var Validator = Class.create();
 
 Validator.prototype = {
-  type: "all",
+	type : "all",
 
-  initialize: function(validators) {                          //#1
-    validators[this.type] = this;
-  },
+	initialize : function(validators) {   //注册常规验证这块
+		validators[this.type] = this;
+	},
 
-  doValidate: function(input) {                               //#2
-    return "";
-  },
+	doValidate : function(input) { 
+		return "";
+	},
 
-  validate: function(input, errordiv) {                       //#3
-    errorMsg = this.doValidate(input);
-    errordiv.innerHTML = errorMsg;
-    return (errorMsg.length == 0);
-  }
+	validate : function(input, errordiv) {  
+		errorMsg = this.doValidate(input);
+		errordiv.innerHTML = errorMsg;
+		return (errorMsg.length == 0);
+	},
+	
 }
 
 var NumberValidator = Class.create();
 
-Object.extend(NumberValidator.prototype,
-              Validator.prototype);
+Object.extend(NumberValidator.prototype, Validator.prototype);
 
 Object.extend(NumberValidator.prototype, {
-    type: "number",                                           //#4
+	type : "number",  
 
-     doValidate: function(input) {                            //#5
-      var numberpattern=/(^\d+$)|(^\d+\.\d+$)/;
-      if (numberpattern.test(input)) {
-        return "";
-      } else {
-        return "'" + input + "' is not a number." ;
-      }
-    }
+	doValidate : function(input) { 
+		var numberpattern = /(^\d+$)|(^\d+\.\d+$)/;
+		if (numberpattern.test(input)) {
+			return "";
+		} else {
+			return "'" + input + "' is not a number.";
+		}
+	}
 });
 
-var DateValidator = Class.create();                           //#1
+var DateValidator = Class.create();  
 Object.extend(DateValidator.prototype, Validator.prototype);
 Object.extend(DateValidator.prototype, {
-  type: "date",
+	type : "date",
 
-   doValidate: function(input) {
-    var value = Date.parse(input);                            //#2
-    if(value <= 0) {
-      return "'" + input + "' is not a date.";
-    } else {
-      return "";
-    }
-  }
+	doValidate : function(input) {
+		var value = Date.parse(input);  
+		if (value <= 0) {
+			return "'" + input + "' is not a date.";
+		} else {
+			return "";
+		}
+	}
 });
 
 var ValidatorFramework = Class.create();
-ValidatorFramework.prototype =
-{
-  validators: 0,
-  crossValidators: 0,                                         //#A
+ValidatorFramework.prototype = {
+	validators : 0,
+	crossValidators : 0,  
 
-  validateForm: function(form) {
-    var retval = true;
-    for(i = 0; i < form.length; i++) {
-      currentInput = form[i];
-      type = currentInput.getAttribute("valid");
-      errorDivName = currentInput.getAttribute("error");
-      if(type == null || errorDivName == null) {
-        continue;
-      } else {
-        valid = this.validate(type, currentInput.value,
-          $(errorDivName));
-        if(!valid) {
-          retval = false;
-        }
-      }
-    }
-    for(i = 0;                                                //#3
-        i < this.crossValidators.length; i++) {
-      this.crossValidators[i].clearErrors();
-    }
-    if (retval) {                                             //#4
-      for(i = 0; i < this.crossValidators.length; i++)  {
-        valid = this.crossValidators[i].validate();
-        if(!valid) {
-          retval = false;
-        }
-      }
-    }
-    return retval;
-  },
+	initialize : function() {
+		this.validators = new Array();
+		this.crossValidators = new Array();
 
-  validate: function(type, input, errordiv) {
-    var validator = this.validators[type];
-    if(!validator) {
-      alert("No validator for type '" + type + "'.");
-      return "";
-    }
-    return validator.validate(input, errordiv);
-  },
+		new Validator(this.validators);
+		new NumberValidator(this.validators);
+		new DateValidator(this.validators);
+	},
+	
+	validateForm : function(form) {
+		var retval = true;
+		for (var i = 0; i < form.length; i++) {
+			currentInput = form[i];
+			type = currentInput.getAttribute("valid");
+			errorDivName = currentInput.getAttribute("error");
+			if (type == null || errorDivName == null) {
+				continue;
+			} else {
+				valid = this.validate(type, currentInput.value, $(errorDivName)); //增加了一个date验证，
+				if (!valid) {
+					retval = false;
+				}
+				else{
+					$(errorDivName).innerHTML="";
+				}
+			}
+		}
+		
+		for (var i = 0;  i < this.crossValidators.length; i++) {
+			this.crossValidators[i].clearErrors();
+		}
+		
+		if (retval) {  
+			for (i = 0; i < this.crossValidators.length; i++) {
+				valid = this.crossValidators[i].validate();
+				if (!valid) {
+					retval = false;
+				}
+			}
+		}
+		return retval;
+	},
 
-  initialize: function() {
-    this.validators = new Array();
-    this.crossValidators = new Array();
-
-    new Validator(this.validators);
-    new NumberValidator(this.validators);
-    new DateValidator(this.validators);
-  }
+	validate : function(type, input, errordiv) {
+		var validator = this.validators[type];
+		if (!validator) {
+			alert("No validator for type '" + type + "'.");
+			return "";
+		}
+		return validator.validate(input, errordiv);
+	}
 
 }
 
-var CrossValidator = Class.create();                          //#5
+var CrossValidator = Class.create(); 
 Object.extend(CrossValidator.prototype, {
-    type: "none",
-    crossError: 0,
-    crossInputs: 0,
+	type : "none",
+	crossInputs : 0,
+	crossError : 0,
 
-    initialize: function(framework,                           //#B
-                         p_crossInputs,                       //#B
-                         p_crossError) {                      //#B
-      framework.crossValidators.push(this);                   //#C
-      this.crossError = p_crossError;
-      this.crossInputs = p_crossInputs;
-    },
+	initialize : function(framework, p_crossInputs, p_crossError) { 
+		    framework.crossValidators.push(this); 
+	        this.crossInputs = p_crossInputs;
+	        this.crossError = p_crossError;    //实际调用 new DateRangeCrossValidator(framework,new Array($('start'),$('end')),$('startend_err'));
+	},
 
-    validate: function() {
-      errorMsg = this.doValidate(
-        this.crossInputs);                                    //#D
-      this.crossError.innerHTML = errorMsg;
-      return (errorMsg.length == 0);
-    },
+	validate : function() {
+		errorMsg = this.doValidate(this.crossInputs); 
+		this.crossError.innerHTML = errorMsg;
+		return (errorMsg.length == 0);
+	},
 
-    clearErrors: function() {                                 //#E
-      this.crossError.innerHTML = "";
-    }
+	clearErrors : function() { 
+		this.crossError.innerHTML = "";
+	}
 });
 
-var DateRangeCrossValidator =                                 //#6
-  Class.create();                                             //#6
-Object.extend(DateRangeCrossValidator.prototype,
-              CrossValidator.prototype);
+var DateRangeCrossValidator = Class.create(); 
+Object.extend(DateRangeCrossValidator.prototype, CrossValidator.prototype);
 Object.extend(DateRangeCrossValidator.prototype, {
 
-  doValidate: function(inputs) {
-    var startDate = Date.parse(inputs[0].value);
-    var endDate = Date.parse(inputs[1].value);
-    if (startDate > endDate) {
-      return "The start date cannot be after the end date.";
-    } else {
-      return "";
-    }
-  }
+	doValidate : function(inputs) {      						//$('start'),$('end')
+		var startDate = Date.parse(inputs[0].value);
+		var endDate = Date.parse(inputs[1].value);
+		if (startDate > endDate) {
+			return "The start date cannot be after the end date.";
+		} else {
+			return "";
+		}
+	}
 
 });

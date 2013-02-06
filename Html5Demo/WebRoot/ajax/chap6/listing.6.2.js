@@ -47,29 +47,38 @@ ValidatorFramework.prototype =
 	    new NumberValidator(this.validators);
 	  },
 	  
-  validateForm: function(form) {
-    var retval = true;
-    for(var i = 0; i < form.length; i++) {
-      currentInput = form[i];
-      type = currentInput.getAttribute("valid");
-      errorDivName = currentInput.getAttribute("error");
-      if(type == null || errorDivName == null) {
-        continue;
-      } else {
-        valid = this.validate(                                
-          type, currentInput.value, $(errorDivName));
-        if(!valid) {
-          retval = false;
-        }
-      }
-    }
-    return retval;
-  },
+
+	  validateForm : function(form) {
+		var retval = true;
+		if (form.length > 1) {
+			for ( var i = 0; i < form.length; i++) {
+				currentInput = form[i];
+				// alert(currentInput.id);
+				type = currentInput.getAttribute("valid");
+				errorDivName = currentInput.getAttribute("error");
+				if (type == null || errorDivName == null) {
+					continue;
+				} else {
+					valid = this.validate(type, currentInput.value,
+							$(errorDivName));
+					if (!valid) {
+						retval = false;
+					}
+				}
+			}
+		} else {
+			type = form.getAttribute("valid");
+			errorDivName = form.getAttribute("error");
+			valid = this.validate(type, form.value, $(errorDivName));
+			if (!valid) {
+				retval = false;
+			}
+		}
+		return retval;
+	},
 
   validate: function(type, input, errordiv) {
 	  return this.validators[type].validate(input, errordiv);                              
   }
-
- 
-
+  
 }
