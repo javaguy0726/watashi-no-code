@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/dom4j"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/junit4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/selenium-2.28"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Dom4j"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JUnit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Selenium-2.25"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
