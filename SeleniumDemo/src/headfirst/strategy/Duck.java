@@ -1,10 +1,11 @@
 package headfirst.strategy;
 
 public abstract class Duck {
-	FlyBehavior flyBehavior;
+	FlyBehavior flyBehavior;   //变化的部分移出来交给了实现 FlyBehavior和QuackBehavior接口的 类了；
 	QuackBehavior quackBehavior;
  
 	public Duck() {
+		
 	}
  
 	public void setFlyBehavior (FlyBehavior fb) {
