@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xmlns="http://java.sun.com/xml/ns/javaee"
-xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
 	<display-name>My Web Container</display-name>
 	<servlet>
 		<servlet-name>ZipCodeValidator</servlet-name>
@@ -36,8 +36,35 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
 		<servlet-name>ParameterInspector2</servlet-name>
 		<url-pattern>/requestInspector</url-pattern>
 	</servlet-mapping>
-	
-	
+	<servlet>
+		<servlet-name>Bookmarks</servlet-name>
+		<servlet-class>Bookmarks</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Bookmarks</servlet-name>
+		<url-pattern>/Bookmarks</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ImageEditor</servlet-name>
+		<servlet-class>ImageEditor</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ImageEditor</servlet-name>
+		<url-pattern>/ImageEditor</url-pattern>
+	</servlet-mapping>
+	<session-config>
+		<!-- Default to 5 minute session timeouts -->
+		<session-timeout>5</session-timeout>
+	</session-config>
+
+	<welcome-file-list id="WelcomeFileList">
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jws</welcome-file>
+	</welcome-file-list>
+
 	<jsp-config>
 		<jsp-property-group>
 			<url-pattern>*.jsp</url-pattern>
