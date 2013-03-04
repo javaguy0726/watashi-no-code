@@ -114,8 +114,39 @@
                 });
             }
             
-            function prepareSelect(){
-                $(".input").each(function(event){
+			function prepareSelect(){
+				$("input.input").each(function(){
+					$(this).click(function(event){
+						var x1 = $(this).offset().left;
+                        var y1 = $(this).offset().top;
+                        var w1 = $(this).width();
+                        var tid = "#" + this.id; //one , middle  and so on;
+                        var sub = tid + "list";
+                        var subu = sub + " ul";
+                        var subl = sub + " li";
+                        var subc = tid + "CD";
+						$(".sub:not("+sub+")").toggle(false);
+						$(sub).css("width", w1+2).css("left", x1).css("top", y1 + 25).toggle(300);
+						 $(subc).css('background-color', 'pink');
+						  $(subl).hover(function(){
+						  	 $(this).css('background-color', 'gray');
+						  },
+						  function(){
+						  	 $(this).css('background-color', 'white');
+                             $(subc).css('background-color', 'pink');
+						  }).click(function(){
+						  	var $text = $(this).text();
+							$(tid).val($.trim($text)).css({ "text-align": "center" });
+                            $(sub).toggle(false);
+						  });
+					});
+					
+				});
+				
+			}
+			
+            function prepareSelect2(){
+                $("input.input").each(function(event){
                     $(this).click(function(e){
                         $(".sub").hide();
                         var x1 = $(this).offset().left;
@@ -139,10 +170,9 @@
                             $(subc).css('background-color', 'pink');
                         });
                         $(subl).click(function(){
-                            var json = '{ "text-align": "center" }';
-                            var cssObject = JSON.parse(json);
-                            $(tid).val($(this).text());
-                            $(tid).css(cssObject);
+                            var $text = $(this).text();
+							$(tid).val($.trim($text));
+                            $(tid).css({ "text-align": "center" });
                             $(sub).hide();
                         });
                         
@@ -154,7 +184,7 @@
     </head>
     <body>
         <div id="other" style="margin-left:40px;">
-            <div class="input" id="one" name="one">
+            <div class="input"  id="one" name="one">
                 TEST ONE
             </div>
             <div id="onelist" class="sub">
