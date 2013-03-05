@@ -81,32 +81,27 @@
             
                 prepareSelect();
                 //add a row for table
-                var i = 0, j = 1;
+                var i = 0;
                 $("#btnOne").click(function(){
                     i++;
-                    j++;
                     var row = $("<tr></tr>");
-                    var cc = "<td><input type='text' id='txt" + j + "' name='txt" + j + "' /></td>";
+                    var cc = "<td><input type='text' id='txt2' name='txt2' /></td>";
                     var cc = cc +
-                    "<td><div id='select" +
+                    "<td><div class='select2'><input type='text' id='sel" +
                     i +
-                    "'><input type='text' id='sel" +
-                    i +
-                    "' name='selNew' class='input' readonly='readonly'/><div id='sel" +
+                    "' name='sel' class='input' readonly='readonly'/><div id='sel" +
                     i +
                     "list' class='sub'><ul><li>CaseOne</li><li>HelloBaby</li><li id='sel" +
                     i +
                     "CD'>Todays</li><li>Marry</li><li>Kitty</li><li>Monkey</li><li>Naruto</li></ul></div></div></td>";
                     cc = cc +
-                    "<td><label id='lbl" +
-                    j +
-                    "'>ONTHING</label></td>";
+                    "<td><label id='lbl2'>ONTHING</label></td>";
                     cc = cc +
                     "<td><input type='button' class='btnDel' value='Delete'/></td>";
                     var cell = $(cc);
                     row.append(cell);
                     $("#tabs").append(row);
-                    prepareNewLine();
+                    prepareSelect();
                 });
             });
             
@@ -119,72 +114,8 @@
                 });
             }
             
-			// add event on the new added line
-            function prepareNewLine(){
-                $("input[name='selNew']").each(function(){
-                    $(this).click(function(event){
-                        var x1 = $(this).offset().left;
-                        var y1 = $(this).offset().top;
-                        var w1 = $(this).width();
-                        var tid = "#" + this.id; //one , middle  and so on;
-                        var sub = tid + "list";
-                        var subu = sub + " ul";
-                        var subl = sub + " li";
-                        var subc = tid + "CD";
-                        $(".sub:not(" + sub + ")").toggle(false);
-                        $(sub).css("width", w1 + 2).css("left", x1).css("top", y1 + 25).toggle(300);
-                        $(subc).css('background-color', 'pink');
-                        $(subl).hover(function(){
-                            $(this).css('background-color', 'gray');
-                        }, function(){
-                            $(this).css('background-color', 'white');
-                            $(subc).css('background-color', 'pink');
-                        }).click(function(){
-                            var $text = $(this).text();
-                            $(tid).val($.trim($text)).css({
-                                "text-align": "center"
-                            });
-                            $(sub).toggle(false);
-                        });
-                    });
-                    
-                });
-            }
-            
             function prepareSelect(){
-                $("input.input").each(function(){
-                    $(this).click(function(event){
-                        var x1 = $(this).offset().left;
-                        var y1 = $(this).offset().top;
-                        var w1 = $(this).width();
-                        var tid = "#" + this.id; //one , middle  and so on;
-                        var sub = tid + "list";
-                        var subu = sub + " ul";
-                        var subl = sub + " li";
-                        var subc = tid + "CD";
-                        $(".sub:not(" + sub + ")").toggle(false);
-                        $(sub).css("width", w1 + 2).css("left", x1).css("top", y1 + 25).toggle(300);
-                        $(subc).css('background-color', 'pink');
-                        $(subl).hover(function(){
-                            $(this).css('background-color', 'gray');
-                        }, function(){
-                            $(this).css('background-color', 'white');
-                            $(subc).css('background-color', 'pink');
-                        }).click(function(){
-                            var $text = $(this).text();
-                            $(tid).val($.trim($text)).css({
-                                "text-align": "center"
-                            });
-                            $(sub).toggle(false);
-                        });
-                    });
-                    
-                });
-                
-            }
-            
-            function prepareSelect2(){
-                $("input.input").each(function(event){
+                $(".input").each(function(event){
                     $(this).click(function(e){
                         $(".sub").hide();
                         var x1 = $(this).offset().left;
@@ -208,11 +139,10 @@
                             $(subc).css('background-color', 'pink');
                         });
                         $(subl).click(function(){
-                            var $text = $(this).text();
-                            $(tid).val($.trim($text));
-                            $(tid).css({
-                                "text-align": "center"
-                            });
+                            var json = '{ "text-align": "center" }';
+                            var cssObject = JSON.parse(json);
+                            $(tid).val($(this).text());
+                            $(tid).css(cssObject);
                             $(sub).hide();
                         });
                         
@@ -329,7 +259,7 @@
                     <input type="text" id="txtOne" name="txtOne" />
                 </td>
                 <td>
-                    <div id="select1">
+                    <div id="select">
                         <input type="text" id="sel" name="sel" class="input" readonly="readonly" />
                         <div id="sellist" class="sub">
                             <ul>
