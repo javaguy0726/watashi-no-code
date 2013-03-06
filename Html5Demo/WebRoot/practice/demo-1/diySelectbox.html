@@ -81,11 +81,12 @@
             
                 prepareSelect();
                 //add a row for table
-                var i = 0;
+                var i = 0, j = 1;
                 $("#btnOne").click(function(){
                     i++;
+					j++;
                     var row = $("<tr></tr>");
-                    var cc = "<td><input type='text' id='txt2' name='txt2' /></td>";
+                    var cc = "<td><input type='text' id='txt"+j+"' name='txt"+j+"'/></td>";
                     var cc = cc +
                     "<td><div class='select2'><input type='text' id='sel" +
                     i +
@@ -95,7 +96,7 @@
                     i +
                     "CD'>Todays</li><li>Marry</li><li>Kitty</li><li>Monkey</li><li>Naruto</li></ul></div></div></td>";
                     cc = cc +
-                    "<td><label id='lbl2'>ONTHING</label></td>";
+                    "<td><label id='lbl"+j+"'>ONTHING</label></td>";
                     cc = cc +
                     "<td><input type='button' class='btnDel' value='Delete'/></td>";
                     var cell = $(cc);
@@ -114,10 +115,10 @@
                 });
             }
             
-			function prepareSelect(){
-				$("input.input").each(function(){
-					$(this).click(function(event){
-						var x1 = $(this).offset().left;
+            function prepareSelect(){
+                $("input.input").each(function(){
+                    $(this).click(function(event){
+                        var x1 = $(this).offset().left;
                         var y1 = $(this).offset().top;
                         var w1 = $(this).width();
                         var tid = "#" + this.id; //one , middle  and so on;
@@ -125,26 +126,27 @@
                         var subu = sub + " ul";
                         var subl = sub + " li";
                         var subc = tid + "CD";
-						$(".sub:not("+sub+")").toggle(false);
-						$(sub).css("width", w1+2).css("left", x1).css("top", y1 + 25).toggle(300);
-						 $(subc).css('background-color', 'pink');
-						  $(subl).hover(function(){
-						  	 $(this).css('background-color', 'gray');
-						  },
-						  function(){
-						  	 $(this).css('background-color', 'white');
-                             $(subc).css('background-color', 'pink');
-						  }).click(function(){
-						  	var $text = $(this).text();
-							$(tid).val($.trim($text)).css({ "text-align": "center" });
+                        $(".sub:not(" + sub + ")").toggle(false);
+                        $(sub).css("width", w1 + 2).css("left", x1).css("top", y1 + 25).toggle(300);
+                        $(subc).css('background-color', 'pink');
+                        $(subl).hover(function(){
+                            $(this).css('background-color', 'gray');
+                        }, function(){
+                            $(this).css('background-color', 'white');
+                            $(subc).css('background-color', 'pink');
+                        }).click(function(){
+                            var $text = $(this).text();
+                            $(tid).val($.trim($text)).css({
+                                "text-align": "center"
+                            });
                             $(sub).toggle(false);
-						  });
-					});
-					
-				});
-				
-			}
-			
+                        });
+                    });
+                    
+                });
+                
+            }
+            
             function prepareSelect2(){
                 $("input.input").each(function(event){
                     $(this).click(function(e){
@@ -171,8 +173,10 @@
                         });
                         $(subl).click(function(){
                             var $text = $(this).text();
-							$(tid).val($.trim($text));
-                            $(tid).css({ "text-align": "center" });
+                            $(tid).val($.trim($text));
+                            $(tid).css({
+                                "text-align": "center"
+                            });
                             $(sub).hide();
                         });
                         
@@ -184,7 +188,7 @@
     </head>
     <body>
         <div id="other" style="margin-left:40px;">
-            <div class="input"  id="one" name="one">
+            <div class="input" id="one" name="one">
                 TEST ONE
             </div>
             <div id="onelist" class="sub">
