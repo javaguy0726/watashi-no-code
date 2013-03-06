@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Test New Dropdown List</title>
+<script src="jquery-1.5.1.js"></script>
+<style type="text/css">
+ul
+{
+	width:300px;
+	border:1px #666666 solid;
+	padding:0px;
+	margin-top:0px;
+}
+li
+{
+	list-style:none;
+}
+.ms, .ad
+{
+	cursor:pointer;
+}
+.sp
+{
+	margin-left:200px;
+}
+.drop
+{
+	float:left;
+}
+.filter
+{
+	float:left;
+}
+.uu
+{
+	display:none;
+	overflow:auto; 
+	max-height:140px;
+}
+label
+{
+	margin-left:10px;
+	margin-right:10px;
+}
+.all, .ms, .ad
+{
+	float:right;
+}
+</style>
+<script type="text/javascript">
+
+var x1 = 0;
+var y1 = 0;
+var cc = "";
+
+$(document).ready(function ()
+{		
+	//refreshPage("product");
+	//refreshPage("component");
+});
+function refreshPage(str)
+{	
+	var val = $("#"+str).val();
+	var arr = new Array();
+	arr = val.split(",");	
+	for(var i=0;i<arr.length-1;i++)
+	{
+		for(var j=0;j<13;j++)
+		{
+			if($("#pd"+str+j).text()==arr[i])
+			{
+				$("#ls"+str+j).css("background-color","red");
+				$("#ms"+str+j).attr("disabled","");
+				$("#ad"+str+j).attr("disabled","disabled");				
+			}
+			ifRed(str+j);
+		}
+	}
+	$(".all").attr("disabled","disabled");
+}
+
+function ifRed(str)
+{
+	if($("#ls"+str).css("background-color")!="red")
+	{
+		$("#ms"+str).attr("disabled","disabled");
+		$("#ad"+str).attr("disabled","");
+	}
+	else
+	{
+		$("#ms"+str).attr("disabled","");
+		$("#ad"+str).attr("disabled","disabled");
+	}
+}
+
+function getDropList(obj)
+{
+	x1 = $(obj).offset().left;
+	y1 = $(obj).offset().top;
+	var pd = obj.id;
+	cc = pd;
+	$("#ul"+pd).css("display","block");
+	if($("#"+pd).val().indexOf("All")==0)
+	{
+		preparedInit(pd);
+	}
+	else
+	{
+		refreshPage(pd);
+	}
+}
+function ifEmpty(obj)
+{
+	if($("#"+obj).val() == "")
+	{
+		$("#"+obj).val("All");
+		$("#"+obj).attr("title","All");
+		$(".all"+obj).css("background-color","red");
+	}
+}
+function preparedInit(obj)
+{
+	$(".all").attr("disabled","disabled");	
+	$(".ms").attr("disabled","disabled");
+	$(".ad").attr("disabled","");
+	$("#"+obj).val("All");
+	$(".all"+obj).css("background-color","red");
+	$(".other"+obj).css("background-color","white");
+}
+
+function addIssue(obj,str)
+{
+	var md = obj.id;
+	var lsd = md.substring(2);
+	$("#ms"+lsd).attr("disabled","");
+	$("#ls"+lsd).css("background-color","red");
+	var pdv = $("#pd"+lsd).text();
+	var pov = $("#"+str).val();
+	pov = pov.replace("All","");
+	$(".all"+str).css("background-color","white");
+	var ss = pdv+","+pov;
+	$("#"+str).val(ss);
+	$("#"+str).attr("title",ss);
+	$(obj).attr("disabled","disabled");
+}
+function removeIssue(obj,str)
+{
+	var md = obj.id;
+	var lsd = md.substring(2);
+	$("#ad"+lsd).attr("disabled","");
+	$("#ls"+lsd).css("background-color","white");
+	var pdv = $("#pd"+lsd).text();
+	var pov = $("#"+str).val();
+	pov = pov.replace(pdv+",","");
+	$("#"+str).val(pov)
+	$("#"+str).attr("title",pov);
+	$(obj).attr("disabled","disabled");
+	ifEmpty(str);
+}
+
+$(document).mousemove(function(e)
+{
+	if(e.pageX<x1||e.pageX>x1+360||e.pageY<y1||e.pageY>y1+190)
+	{
+		$("#ul"+cc).hide();
+	}
+});
+
+</script>
+</head>
+<body>
+<div style="clear:both;margin-left:60px; margin-top:130px;">
+<div class="filter">Condition:</div>
+<div class="drop">
+	<input type="text" name="product" id="product" style="width:296px;" value="All" title="All"onmouseover="javascript:getDropList(this);"/> <input type="button" value="clear" onclick="javascript:preparedInit('product');"/>
+	<ul id="ulproduct" class="uu">
+	<li id="lsproduct0" class="allproduct"><label id="pdproduct0">All</label><label id="adproduct0" class="all" onclick="javascript:addIssue(this,'product');">+</label><label class="all"  onclick="javascript:removeIssue(this,'product');">-</label></li>
+	<li id="lsproduct1"class="otherproduct"><label id="pdproduct1">Farad Base</label><label id="adproduct1" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct1" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct2"class="otherproduct"><label id="pdproduct2">Farad Mid</label><label id="adproduct2" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct2" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct3"class="otherproduct"><label id="pdproduct3">Farad Hi</label><label id="adproduct3" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct3" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct4"class="otherproduct"><label id="pdproduct4">FPUI</label><label id="adproduct4" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct4" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct5"class="otherproduct"><label id="pdproduct5">Copy</label><label id="adproduct5" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct5" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct6"class="otherproduct"><label id="pdproduct6">EWS Asset</label><label id="adproduct6" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct6" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct7"class="otherproduct"><label id="pdproduct7">Win8</label><label id="adproduct7" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct7" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct8"class="otherproduct"><label id="pdproduct8">CPE</label><label id="adproduct8" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct8" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct9"class="otherproduct"><label id="pdproduct9">Photo</label><label id="adproduct9" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct9" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct10"class="otherproduct"><label id="pdproduct10">Poker</label><label id="adproduct10" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct10" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct11"class="otherproduct"><label id="pdproduct11">Mac Auto</label><label id="adproduct11" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct11" class="ms"  onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	<li id="lsproduct12"class="otherproduct"><label id="pdproduct12">Schooner</label><label id="adproduct12" class="ad" onclick="javascript:addIssue(this,'product');">+</label><label id="msproduct12" class="ms" onclick="javascript:removeIssue(this,'product');" >-</label></li>
+	</ul>
+</div>
+
+<div class="drop">
+	<input type="text" name="component" id="component" style="width:296px;" value="All" title="All"onmouseover="javascript:getDropList(this);"/> <input type="button" value="clear" onclick="javascript:preparedInit('component');"/>
+	<ul id="ulcomponent" class="uu">
+	<li id="lscomponent0" class="allcomponent"><label id="pdcomponent0">All</label><label id="adcomponent0" class="all" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent0" class="all"  onclick="javascript:removeIssue(this,'component');">-</label></li>
+	<li id="lscomponent1"class="othercomponent"><label id="pdcomponent1">Farad Base</label><label id="adcomponent1" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent1" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent2"class="othercomponent"><label id="pdcomponent2">Farad Mid</label><label id="adcomponent2" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent2" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent3"class="othercomponent"><label id="pdcomponent3">Farad Hi</label><label id="adcomponent3" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent3" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent4"class="othercomponent"><label id="pdcomponent4">FPUI</label><label id="adcomponent4" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent4" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent5"class="othercomponent"><label id="pdcomponent5">Copy</label><label id="adcomponent5" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent5" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent6"class="othercomponent"><label id="pdcomponent6">EWS Asset</label><label id="adcomponent6" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent6" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent7"class="othercomponent"><label id="pdcomponent7">Win8</label><label id="adcomponent7" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent7" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent8"class="othercomponent"><label id="pdcomponent8">CPE</label><label id="ad8" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent8" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent9"class="othercomponent"><label id="pdcomponent9">Photo</label><label id="adcomponent9" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent9" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent10"class="othercomponent"><label id="pdcomponent10">Poker</label><label id="adcomponent10" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent10" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent11"class="othercomponent"><label id="pdcomponent11">Mac Auto</label><label id="adcomponent11" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent11" class="ms"  onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	<li id="lscomponent12"class="othercomponent"><label id="pdcomponent12">Schooner</label><label id="adcomponent12" class="ad" onclick="javascript:addIssue(this,'component');">+</label><label id="mscomponent12" class="ms" onclick="javascript:removeIssue(this,'component');" >-</label></li>
+	</ul>
+</div>
+
+<div style="float:left;margin-left:50px;">Status:<input type="text" name="status" id="status"/></div>
+</div>
+</body>
+</html>
