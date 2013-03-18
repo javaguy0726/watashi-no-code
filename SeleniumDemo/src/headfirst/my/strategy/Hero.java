@@ -1,23 +1,42 @@
 package headfirst.my.strategy;
 
 public abstract class Hero {
- 
+
 	CONBehavior conBehav;
 	AOEBehavior aoeBehav;
-	
-	public Hero(){
-		
+
+	public Hero() {
+
+	}
+
+	public  void attack(){
+		System.out.println("attack!");
+	}
+
+	public  void stand(){
+		System.out.println("Stand!");
+	}
+
+	public void hold(){
+		System.out.println("Hold!");
+	}
+
+	public void performCON() {
+		if(conBehav==null){
+			System.out.println("This hero doesn't has this skill.");
+			return;
+		}
+		conBehav.control();
+	}
+
+	public void performAOE() {
+		if(aoeBehav==null){
+			System.out.println("This hero doesn't has this skill.");
+			return;
+		}
+		aoeBehav.areaDamage();
 	}
 	
-	public abstract void attack();
-    public abstract void stand();
-    public abstract void hold();
-  
-   
-    public void performCON(){
-    	
-    }
-    public void performAOE(){
-    	
-    }
+	public abstract void info();
+	
 }
