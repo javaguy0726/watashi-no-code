@@ -5,7 +5,7 @@ public class StrategyDrive {
 			Hero hero = new WitchDoctor();
 			hero.performCON();
 			hero.performAOE();
-			
+			hero.setCONBehavior(new ConWithFire());
 			
 	}
 }

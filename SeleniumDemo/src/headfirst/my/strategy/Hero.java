@@ -39,4 +39,11 @@ public abstract class Hero {
 	
 	public abstract void info();
 	
+	public void setCONBehavior(CONBehavior conB){
+		this.conBehav = conB;
+	}
+	public void setAOEBehavior(AOEBehavior aoeB){
+		this.aoeBehav=aoeB;
+	}
+	
 }
