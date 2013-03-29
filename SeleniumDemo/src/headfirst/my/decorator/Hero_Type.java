@@ -5,6 +5,12 @@ public abstract class Hero_Type {
 	int agility;
 	int intelligence;
 	
-	public abstract void damage();
+	String description;
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public abstract int damage();
 
 }
