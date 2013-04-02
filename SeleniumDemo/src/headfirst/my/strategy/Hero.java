@@ -9,20 +9,20 @@ public abstract class Hero {
 
 	}
 
-	public  void attack(){
+	public void attack() {
 		System.out.println("attack!");
 	}
 
-	public  void stand(){
+	public void stand() {
 		System.out.println("Stand!");
 	}
 
-	public void hold(){
+	public void hold() {
 		System.out.println("Hold!");
 	}
 
 	public void performCON() {
-		if(conBehav==null){
+		if (conBehav == null) {
 			System.out.println("This hero doesn't has this skill.");
 			return;
 		}
@@ -30,20 +30,21 @@ public abstract class Hero {
 	}
 
 	public void performAOE() {
-		if(aoeBehav==null){
+		if (aoeBehav == null) {
 			System.out.println("This hero doesn't has this skill.");
 			return;
 		}
 		aoeBehav.areaDamage();
 	}
-	
+
 	public abstract void info();
-	
-	public void setCONBehavior(CONBehavior conB){
+
+	public void setCONBehavior(CONBehavior conB) {
 		this.conBehav = conB;
 	}
-	public void setAOEBehavior(AOEBehavior aoeB){
-		this.aoeBehav=aoeB;
+
+	public void setAOEBehavior(AOEBehavior aoeB) {
+		this.aoeBehav = aoeB;
 	}
-	
+
 }
