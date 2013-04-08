@@ -7,7 +7,6 @@ public abstract class Hero {
 	
 	void attack(){
 		System.out.println(name+" is attacking!");
-		
 	}
     
 	void stand(){
