@@ -1,5 +1,5 @@
 package headfirst.my.abstractfactory;
 
-public interface Phase {
+public interface Range {
 	public String toString();
 }

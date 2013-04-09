@@ -7,7 +7,7 @@ public abstract class Hero_Chooser {
 	public void controlHero(String name) {
 		Hero hero;
 		hero = selectHero(name);
-		
+		hero.attributes();
 		hero.attack();
 		hero.hold();
 		

@@ -1,5 +1,5 @@
 package headfirst.my.abstractfactory;
 
-public interface Type {
+public interface GrowSpeed {
 	public String toString();
 }

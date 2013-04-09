@@ -1,5 +1,5 @@
 package headfirst.my.abstractfactory;
 
-public interface Tavern {
+public interface Resistance {
 	public String toString();
 }
